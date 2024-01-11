@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "legitimail"
+version = "0.1.0"
+description = "Open source tool for figuring out if an email address belongs to a real(ly online) person"
+authors = ["Rebecca Lovering <lovering810@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+requests = "*"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
