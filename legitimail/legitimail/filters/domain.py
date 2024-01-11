@@ -10,4 +10,10 @@ class Domain(Filter):
 
     @staticmethod
     def filter(candidate: Candidate):
-        return requests.head(candidate.domain).ok
+        legit = False
+        schemata = ["https://", "https://www.", "http://", "http://www."]
+        for schema in schemata:
+            url = f"{schema}{candidate.domain}"
+            if requests.head(url).ok:
+                legit = True
+        return legit

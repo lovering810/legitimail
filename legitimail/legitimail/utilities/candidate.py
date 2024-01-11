@@ -8,7 +8,7 @@ class Candidate:
         if not self.validate_string(entry=entry):
             raise AttributeError()
         self.entry = entry
-        self.name, self.domain = self.entry.spllit("@")
+        self.name, self.domain = self.entry.split("@")
         self.results = []
 
     @classmethod
