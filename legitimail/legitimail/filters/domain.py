@@ -1,5 +1,5 @@
-from ..utilities.filter import Filter
-from ..utilities.candidate import Candidate
+from legitimail.utilities.filter import Filter
+from legitimail.utilities.candidate import Candidate
 import requests
 
 

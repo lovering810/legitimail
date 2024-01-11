@@ -22,18 +22,25 @@ def load_filter_module(
     Returns:
     module: if a module exists for this field, returns it.
     """
-    filter_name = filter_path.stem()
+    assert isinstance(filter_path, Path)
+    filter_name = filter_path.stem
+    logging.debug(f"Filter name: {filter_name}")
     if not filter_path.exists():
         raise FileNotFoundError(
             f"No module for filter {filter_name} (Looked at {filter_path})"
         )
     try:
+        logging.debug(f"Trying to import spec from loc {filter_path}")
         module_spec = importlib.util.spec_from_file_location(
             filter_name, filter_path
         )
+        logging.debug(f"Found module spec {module_spec}, trying to import")
         module = importlib.util.module_from_spec(spec=module_spec)
+        logging.debug(f"Imported module from spec {module}")
         sys.modules[filter_name] = module
+        logging.debug(f"Assigned module to sys path at {filter_name}")
         module_spec.loader.exec_module(module)
+        logging.debug("Loaded module!")
     except Exception as e:
         raise ImportError(
             f"Could not import {filter_name} from file {filter_path}: {e}"
@@ -43,15 +50,17 @@ def load_filter_module(
 
 def load_all_filters():
     # get all filters (non-__init__ .py files)
-    filterfiles = filter(
-        lambda x: not x.startswith("__"), list(FILTER_DIR.glob('*.py'))
-        )
+    filterfiles = [f for f in filter(
+        lambda x: not x.stem.startswith("__"), list(FILTER_DIR.glob('*.py'))
+        )]
+    logging.debug(f"filterfiles: {filterfiles}")
     successful_filters = []
+
     for ff in filterfiles:
-        logging.debug(f"Trying to load {ff.name}")
+        logging.debug(f"Trying to load {ff}")
         try:
             load_filter_module(ff)
-            successful_filters.append(ff.stem())
+            successful_filters.append(ff.stem)
         except Exception as e:
             logging.warning(f"Could not load filter: {e}")
 
